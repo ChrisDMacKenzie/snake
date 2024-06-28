@@ -1,10 +1,9 @@
 import pygame
-import initialize
 import random
 import math
-from snake import Snake, segmentSize
-
-foodSize = 16
+import initialize
+import resources
+from snake import Snake
 
 class Food:
     # used so we don't spawn the food on top of the snake
@@ -22,37 +21,35 @@ class Food:
         
         
     def draw(self, screen):    
+        x, y = resources.setLocation(self.x, self.y, initialize.foodSize)
         pygame.draw.rect(
             screen,
-            "blue",
+            initialize.blue,
             pygame.Rect(
-                    self.x,
-                    self.y,
-                    foodSize,
-                    foodSize))
+                    x,
+                    y,
+                    initialize.foodSize,
+                    initialize.foodSize))
         pygame.display.flip()
     
     def checkSnakeLocation(self, Snake):
         for segment in Snake.body:
-            if self.x in range(int(segment.x), int(segment.x + segmentSize)) \
-            and self.y in range(int(segment.y), int(segment.y + segmentSize)):
+            if self.x == segment.x \
+            and self.y == segment.y:
                 self.inSnake = True
                 break
 
     def placeFood(self):
         self.inSnake = False
-        self.x = random.randint(0, math.floor(initialize.width-(foodSize/2)))
-        self.y = random.randint(0, math.floor(initialize.height-(foodSize/2)))
-        print(self.x, self.y)
+        self.x = initialize.xVals[random.randint(0, len(initialize.xVals) - 1)]
+        self.y = initialize.yVals[random.randint(0, len(initialize.yVals) - 1)]
 
 
-    def checkIfEaten(self, Snake):
-        if self.x in range(int(Snake.body[0].x), int(Snake.body[0].x + segmentSize)) \
-            and self.y in range(int(Snake.body[0].y), int(Snake.body[0].y + segmentSize)):
+    def checkIfEaten(self, snake):
+        if self.x == snake.body[0].x \
+            and self.y == snake.body[0].y:
                 self.inSnake = True
-                Snake.hasEaten = True
+                snake.hasEaten = True
                 while self.inSnake:
                     self.placeFood()
-                    self.checkSnakeLocation(Snake)
-                for segment in Snake.body:
-                    print(segment.x, segment.y)
+                    self.checkSnakeLocation(snake)

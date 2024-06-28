@@ -14,7 +14,7 @@ food = Food(snake)
 MOVEEVENT = pygame.USEREVENT+1
 pygame.time.set_timer(MOVEEVENT, snake.speed)
 
-while True:
+while snake.alive:
     if pygame.event.get(pygame.QUIT): break
     
     keys = pygame.key.get_pressed()
@@ -32,6 +32,6 @@ while True:
             elif (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and (snake.direction not in ['E', 'W']):
                 # logger.debug("changing direction to east")
                 snake.direction = 'E'
-            update(screen, snake, food)
+            update(screen, snake, food, MOVEEVENT)
     
     screen.fill(initialize.black)

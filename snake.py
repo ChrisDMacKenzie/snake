@@ -1,29 +1,32 @@
 import pygame
+import math
 import initialize
-
-segmentSize = float(19)
-moveDistance = segmentSize + 1
+import resources
 
 class Snake:
 
-    moveDistance = segmentSize + 1
     hasEaten = False
+    alive = True
     
     def __init__(self) -> None:
         self.speed = 200
         self.direction = 'N'
-        self.body = [snakeSegment(initialize.width/2, initialize.height/2)]
+        # put the snake in the center of the screen to start
+        xIdx = math.floor(len(initialize.xVals)/2)
+        yIdx = math.floor(len(initialize.yVals)/2)
+        self.body = [snakeSegment(initialize.xVals[xIdx], initialize.yVals[yIdx])]
 
     def draw(self, screen):
         for segment in self.body:
+            x, y = resources.setLocation(segment.x, segment.y, initialize.snakeSize)
             pygame.draw.rect(
                 screen,
-                "white",
+                initialize.white,
                 pygame.Rect(
-                    segment.x-(segmentSize/2),
-                    segment.y-(segmentSize/2),
-                    segmentSize,
-                    segmentSize))
+                    x,
+                    y,
+                    initialize.snakeSize,
+                    initialize.snakeSize))
         pygame.display.flip()
 
     def move(self):
@@ -31,13 +34,13 @@ class Snake:
         newHead = snakeSegment(self.body[0].x, self.body[0].y)
         match self.direction:
             case 'N':
-                newHead.y -= moveDistance
+                newHead.y -= 1
             case 'S':
-                newHead.y += moveDistance
+                newHead.y += 1
             case 'E':
-                newHead.x += moveDistance
+                newHead.x += 1
             case 'W':
-                newHead.x -= moveDistance
+                newHead.x -= 1
         
         # attach the new head to the snake
         self.body.insert(0, newHead)
@@ -47,6 +50,18 @@ class Snake:
             self.body = self.body[:-1]
 
         self.hasEaten = False
+
+    def checkForDeath(self):
+        # check if the snake has gone off the screen
+        if self.body[0].x not in initialize.xVals \
+        or self.body[0].y not in initialize.yVals:
+            self.alive = False
+        # check if the snake has run into itself
+        if len(self.body) >= 5:
+            for segment in self.body[4:]:
+                if self.body[0].x == segment.x \
+                and self.body[0].y == segment.y:
+                    self.alive = False
 
 
 class snakeSegment:
