@@ -9,7 +9,7 @@ class Snake:
     alive = True
     
     def __init__(self) -> None:
-        self.speed = 200
+        self.speed = 150
         self.direction = 'N'
         # put the snake in the center of the screen to start
         xIdx = math.floor(len(initialize.xVals)/2)
