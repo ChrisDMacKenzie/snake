@@ -1,6 +1,6 @@
 import pygame
 import math
-import initialize
+import constants
 import resources
 
 class Snake:
@@ -12,21 +12,21 @@ class Snake:
         self.speed = 150
         self.direction = 'N'
         # put the snake in the center of the screen to start
-        xIdx = math.floor(len(initialize.xVals)/2)
-        yIdx = math.floor(len(initialize.yVals)/2)
-        self.body = [snakeSegment(initialize.xVals[xIdx], initialize.yVals[yIdx])]
+        xIdx = math.floor(len(constants.X_VALS)/2)
+        yIdx = math.floor(len(constants.Y_VALS)/2)
+        self.body = [snakeSegment(constants.X_VALS[xIdx], constants.Y_VALS[yIdx])]
 
     def draw(self, screen):
         for segment in self.body:
-            x, y = resources.setLocation(segment.x, segment.y, initialize.snakeSize)
+            x, y = resources.setLocation(segment.x, segment.y, constants.SNAKE_SIZE)
             pygame.draw.rect(
                 screen,
-                initialize.white,
+                constants.WHITE,
                 pygame.Rect(
                     x,
                     y,
-                    initialize.snakeSize,
-                    initialize.snakeSize))
+                    constants.SNAKE_SIZE,
+                    constants.SNAKE_SIZE))
         pygame.display.flip()
 
     def move(self):
@@ -53,8 +53,8 @@ class Snake:
 
     def checkForDeath(self):
         # check if the snake has gone off the screen
-        if self.body[0].x not in initialize.xVals \
-        or self.body[0].y not in initialize.yVals:
+        if self.body[0].x not in constants.X_VALS \
+        or self.body[0].y not in constants.Y_VALS:
             self.alive = False
         # check if the snake has run into itself
         if len(self.body) >= 5:

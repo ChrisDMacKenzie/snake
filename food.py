@@ -1,7 +1,6 @@
 import pygame
 import random
-import math
-import initialize
+import constants
 import resources
 from snake import Snake
 
@@ -21,15 +20,15 @@ class Food:
         
         
     def draw(self, screen):    
-        x, y = resources.setLocation(self.x, self.y, initialize.foodSize)
+        x, y = resources.setLocation(self.x, self.y, constants.FOOD_SIZE)
         pygame.draw.rect(
             screen,
-            initialize.blue,
+            constants.BLUE,
             pygame.Rect(
                     x,
                     y,
-                    initialize.foodSize,
-                    initialize.foodSize))
+                    constants.FOOD_SIZE,
+                    constants.FOOD_SIZE))
         pygame.display.flip()
     
     def checkSnakeLocation(self, Snake):
@@ -41,8 +40,8 @@ class Food:
 
     def placeFood(self):
         self.inSnake = False
-        self.x = initialize.xVals[random.randint(0, len(initialize.xVals) - 1)]
-        self.y = initialize.yVals[random.randint(0, len(initialize.yVals) - 1)]
+        self.x = constants.X_VALS[random.randint(0, len(constants.X_VALS) - 1)]
+        self.y = constants.Y_VALS[random.randint(0, len(constants.Y_VALS) - 1)]
 
 
     def checkIfEaten(self, snake):
