@@ -6,10 +6,14 @@ from food import Food
 
 class Game:
     def __init__(self, screen):
-        self.snake = Snake()
-        self.food = Food()
         self.moveEvent = pygame.USEREVENT+1
         self.screen = screen
+        self.snake = Snake()
+        self.food = Food()
+        # make sure the first food spawn isn't on top of the snake
+        while self.snake.needsFood:
+            self.food.placeFood()
+            self.checkForOverlap()
     
     def run(self):
         pygame.time.set_timer(self.moveEvent, self.snake.speed)
@@ -50,10 +54,10 @@ class Game:
     def checkForEat(self):
         if self.food.x == self.snake.body[0].x \
             and self.food.y == self.snake.body[0].y:
-                self.snake.ateCurrentFood = True
+                self.snake.needsFood = True
                 self.snake.needsToExtend = True
-                while self.snake.ateCurrentFood:
-                    self.snake.speedUp(self.moveEvent)
+                self.snake.speedUp(self.moveEvent)
+                while self.snake.needsFood:
                     self.food.placeFood()
                     self.checkForOverlap()
 
@@ -63,4 +67,4 @@ class Game:
             if self.food.x == segment.x \
             and self.food.y == segment.y:
                 break
-            self.snake.ateCurrentFood = False
+            self.snake.needsFood = False

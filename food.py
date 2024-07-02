@@ -10,8 +10,8 @@ class Food:
     y = float(0)
 
     # randomize the location on first spawn
-    def __init__(self):
-            self.placeFood()
+    # def __init__(self):
+    #         self.placeFood()
         
         
     def draw(self, screen):    

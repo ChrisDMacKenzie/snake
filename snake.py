@@ -6,7 +6,7 @@ import resources
 class Snake:
 
     # some boolean vals to hold the state of the snake
-    ateCurrentFood = False
+    needsFood = True
     needsToExtend = False
     alive = True
     
