@@ -4,6 +4,7 @@ import constants
 import resources
 
 class Food:
+    
     # food location
     x = float(0)
     y = float(0)
@@ -25,6 +26,5 @@ class Food:
                     constants.FOOD_SIZE))
 
     def placeFood(self):
-        self.inSnake = False
         self.x = constants.X_VALS[random.randint(0, len(constants.X_VALS) - 1)]
         self.y = constants.Y_VALS[random.randint(0, len(constants.Y_VALS) - 1)]

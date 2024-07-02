@@ -5,6 +5,7 @@ import resources
 
 class Snake:
 
+    # some boolean vals to hold the state of the snake
     ateCurrentFood = False
     needsToExtend = False
     alive = True
@@ -63,7 +64,7 @@ class Snake:
                 and self.body[0].y == segment.y:
                     self.alive = False
 
-     # speeds up the snake once it's eaten food
+    # speeds up the snake once it's eaten food
     def speedUp(self,  moveEvent):
         if self.speed >= 10:
             self.speed -= 2

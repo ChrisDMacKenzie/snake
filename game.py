@@ -18,6 +18,8 @@ class Game:
             if pygame.event.get(pygame.QUIT): break
             
             keys = pygame.key.get_pressed()
+            
+            # basic snake moving controls
             for e in pygame.event.get():
                 if e.type == self.moveEvent:
                     if (keys[pygame.K_w] or keys[pygame.K_UP]) and (self.snake.direction not in ['N', 'S']):
@@ -49,6 +51,7 @@ class Game:
         if self.food.x == self.snake.body[0].x \
             and self.food.y == self.snake.body[0].y:
                 self.snake.ateCurrentFood = True
+                self.snake.needsToExtend = True
                 while self.snake.ateCurrentFood:
                     self.snake.speedUp(self.moveEvent)
                     self.food.placeFood()
@@ -61,4 +64,3 @@ class Game:
             and self.food.y == segment.y:
                 break
             self.snake.ateCurrentFood = False
-            self.snake.needsToExtend = True
