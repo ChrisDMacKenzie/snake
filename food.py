@@ -2,7 +2,6 @@ import pygame
 import random
 import constants
 import resources
-from snake import Snake
 
 class Food:
     # food location
