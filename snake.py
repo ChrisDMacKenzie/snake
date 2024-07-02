@@ -5,7 +5,8 @@ import resources
 
 class Snake:
 
-    hasEaten = False
+    ateCurrentFood = False
+    needsToExtend = False
     alive = True
     
     def __init__(self) -> None:
@@ -27,7 +28,6 @@ class Snake:
                     y,
                     constants.SNAKE_SIZE,
                     constants.SNAKE_SIZE))
-        pygame.display.flip()
 
     def move(self):
         # determine the coordinates for where the head needs to go
@@ -46,10 +46,10 @@ class Snake:
         self.body.insert(0, newHead)
 
         # if we didn't just eat a pellet, delete the back segment
-        if not self.hasEaten:
+        if not self.needsToExtend:
             self.body = self.body[:-1]
 
-        self.hasEaten = False
+        self.needsToExtend = False
 
     def checkForDeath(self):
         # check if the snake has gone off the screen
@@ -62,6 +62,12 @@ class Snake:
                 if self.body[0].x == segment.x \
                 and self.body[0].y == segment.y:
                     self.alive = False
+
+     # speeds up the snake once it's eaten food
+    def speedUp(self,  moveEvent):
+        if self.speed >= 10:
+            self.speed -= 2
+            pygame.time.set_timer(moveEvent, self.speed)
 
 
 class snakeSegment:

@@ -7,19 +7,19 @@ from food import Food
 class Game:
     def __init__(self, screen):
         self.snake = Snake()
-        self.food = Food(self.snake)
-        self.MOVEEVENT = pygame.USEREVENT+1
+        self.food = Food()
+        self.moveEvent = pygame.USEREVENT+1
         self.screen = screen
     
     def run(self):
-        pygame.time.set_timer(self.MOVEEVENT, self.snake.speed)
+        pygame.time.set_timer(self.moveEvent, self.snake.speed)
 
         while self.snake.alive:
             if pygame.event.get(pygame.QUIT): break
             
             keys = pygame.key.get_pressed()
             for e in pygame.event.get():
-                if e.type == self.MOVEEVENT:
+                if e.type == self.moveEvent:
                     if (keys[pygame.K_w] or keys[pygame.K_UP]) and (self.snake.direction not in ['N', 'S']):
                         # logger.debug("changing direction to north")
                         self.snake.direction = 'N'
@@ -39,12 +39,26 @@ class Game:
     def update(self):
         self.food.draw(self.screen)
         self.snake.draw(self.screen)
+        pygame.display.flip()
         self.snake.checkForDeath()
-        self.food.checkIfEaten(self.snake)
-        # if the snake just ate and the speed isn't already too fast,
-        # speed up the snake
-        if self.snake.hasEaten and self.snake.speed >= 10:
-            self.snake.speed -= 2
-            pygame.time.set_timer(self.MOVEEVENT, self.snake.speed)
+        self.checkForEat()
         self.snake.move()
 
+    # checks to see if the snake just ate
+    def checkForEat(self):
+        if self.food.x == self.snake.body[0].x \
+            and self.food.y == self.snake.body[0].y:
+                self.snake.ateCurrentFood = True
+                while self.snake.ateCurrentFood:
+                    self.snake.speedUp(self.moveEvent)
+                    self.food.placeFood()
+                    self.checkForOverlap()
+
+    # when placing new food, make sure it doesn't overlap with the snakes current location
+    def checkForOverlap(self):
+        for segment in self.snake.body:
+            if self.food.x == segment.x \
+            and self.food.y == segment.y:
+                break
+            self.snake.ateCurrentFood = False
+            self.snake.needsToExtend = True
