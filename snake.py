@@ -12,7 +12,7 @@ class Snake:
     
     def __init__(self) -> None:
         self.speed = 150
-        self.direction = 'N'
+        self.direction = 'INIT'
         # put the snake in the center of the screen to start
         xIdx = math.floor(len(constants.X_VALS)/2)
         yIdx = math.floor(len(constants.Y_VALS)/2)

@@ -1,19 +1,25 @@
 import pygame
 import constants
+import surface
 from snake import Snake
 from food import Food
 
 
 class Game:
-    def __init__(self, screen):
-        self.moveEvent = pygame.USEREVENT+1
+    def __init__(self, screen, scoreFont):
         self.screen = screen
+        self.gameSurface = surface.drawGameSurface()
+        self.scoreFont = scoreFont
+        self.moveEvent = pygame.USEREVENT+1
         self.snake = Snake()
         self.food = Food()
         # make sure the first food spawn isn't on top of the snake
         while self.snake.needsFood:
             self.food.placeFood()
             self.checkForOverlap()
+        # initialize the score to zero
+        self.score = 0
+        self.drawScore()
     
     def run(self):
         pygame.time.set_timer(self.moveEvent, self.snake.speed)
@@ -40,20 +46,22 @@ class Game:
                         self.snake.direction = 'E'
                     self.update()
             
-            self.screen.fill(constants.BLACK)
+            self.screen.blit(self.gameSurface, (0, 0))
 
     def update(self):
         self.food.draw(self.screen)
         self.snake.draw(self.screen)
-        pygame.display.flip()
         self.snake.checkForDeath()
         self.checkForEat()
+        pygame.display.update()
         self.snake.move()
 
     # checks to see if the snake just ate
     def checkForEat(self):
         if self.food.x == self.snake.body[0].x \
             and self.food.y == self.snake.body[0].y:
+                self.score += 1
+                self.drawScore()
                 self.snake.needsFood = True
                 self.snake.needsToExtend = True
                 self.snake.speedUp(self.moveEvent)
@@ -68,3 +76,21 @@ class Game:
             and self.food.y == segment.y:
                 break
             self.snake.needsFood = False
+
+    def drawScore(self):
+        scoreStr = str(self.score).zfill(4)
+        scoreObj = self.scoreFont.render(scoreStr, True, (constants.WHITE))
+        scoreObjRect = scoreObj.get_rect()
+        scoreObjRect.bottomright = constants.WIDTH - constants.OUTSIDE_BORDER_WIDTH, \
+            scoreObjRect.height + (constants.TITLE_REGION_HEIGHT - scoreObjRect.height) / 2
+        # erase the old score
+        self.gameSurface.fill(
+            constants.BLACK,
+            (
+                constants.WIDTH - constants.SCORE_WIDTH,
+                0,
+                constants.SCORE_WIDTH,
+                constants.TITLE_REGION_HEIGHT)
+        )
+        # write the new score
+        self.gameSurface.blit(scoreObj, scoreObjRect)
