@@ -1,6 +1,7 @@
 import pygame
+import time
 import constants
-import surface
+import gameSurface
 from snake import Snake
 from food import Food
 
@@ -8,7 +9,7 @@ from food import Food
 class Game:
     def __init__(self, screen, scoreFont):
         self.screen = screen
-        self.gameSurface = surface.drawGameSurface()
+        self.gameSurface = gameSurface.drawGameSurface()
         self.scoreFont = scoreFont
         self.moveEvent = pygame.USEREVENT+1
         self.snake = Snake()
@@ -29,6 +30,7 @@ class Game:
             
             keys = pygame.key.get_pressed()
             
+            self.screen.blit(self.gameSurface, (0, 0))
             # basic snake moving controls
             for e in pygame.event.get():
                 if e.type == self.moveEvent:
@@ -46,15 +48,19 @@ class Game:
                         self.snake.direction = 'E'
                     self.update()
             
-            self.screen.blit(self.gameSurface, (0, 0))
+        
+        self.snake.playDeathAnimation(self.screen)
+        time.sleep(2)
+        return self.score
 
     def update(self):
         self.food.draw(self.screen)
         self.snake.draw(self.screen)
         self.snake.checkForDeath()
-        self.checkForEat()
-        pygame.display.update()
-        self.snake.move()
+        if self.snake.alive:
+            self.checkForEat()
+            pygame.display.update()
+            self.snake.move()
 
     # checks to see if the snake just ate
     def checkForEat(self):

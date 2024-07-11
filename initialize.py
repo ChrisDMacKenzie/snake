@@ -15,5 +15,6 @@ def init():
     clock = pygame.time.Clock()
 
     scoreFont = pygame.font.Font('fonts/Seven Segment.ttf', 60)
+    EnterScoreFont = pygame.font.Font('fonts/Tomorrow-Regular.ttf', 36)
 
-    return logger, screen, clock, scoreFont
+    return logger, screen, clock, scoreFont, EnterScoreFont

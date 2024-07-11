@@ -70,6 +70,19 @@ class Snake:
             self.speed -= 2
             pygame.time.set_timer(moveEvent, self.speed)
 
+    # play a quick little animation when dead before going to the high score screen
+    def playDeathAnimation(self, screen):
+        # get location of where the explosion needs to go
+        x, y = resources.setLocation(self.body[0].x, self.body[0].y, constants.SNAKE_SIZE)
+        
+        # load the explosion image and display it
+        deathImg = pygame.image.load('assets/images/explosion.png')
+        deathRect = deathImg.get_rect()
+        deathRect.center = x + (constants.SNAKE_SIZE / 2), y + (constants.SNAKE_SIZE / 2)
+        screen.blit(deathImg, deathRect)
+        pygame.display.update()
+
+
 
 class snakeSegment:
     x = float(0)
