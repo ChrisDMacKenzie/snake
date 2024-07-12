@@ -1,7 +1,10 @@
 import pygame
 import constants
+from sqlalchemy import insert
+from model.scores import Score
+from model.base import Base
 
-def drawScoreSurface(screen, score, enterScoreFont, scoreFont):
+def drawScoreSurface(screen, score, session, enterScoreFont, scoreFont):
     # erase the old screen
     screen.fill(constants.BLACK)
 
@@ -23,7 +26,8 @@ def drawScoreSurface(screen, score, enterScoreFont, scoreFont):
     enterObjRect.center = (500, 330)
     screen.blit(enterObj, enterObjRect)
     pygame.display.update()
-    getPlayerInits(screen, enterScoreFont)
+    inits = getPlayerInits(screen, enterScoreFont)
+    saveScore(session, inits, score)
 
 def getPlayerInits(screen, enterScoreFont):
     inits = ""
@@ -58,3 +62,12 @@ def getPlayerInits(screen, enterScoreFont):
                     pygame.display.update()
                 if keyPress.key in [pygame.K_KP_ENTER, pygame.K_RETURN] and len(inits) in range(1, 4):
                     enteringInits = False
+
+    return inits
+
+def saveScore(session, inits, score):
+    stmt = (
+        insert(Base.metadata.tables[Score.__tablename__]).
+        values(initials=inits, score=score)
+    )
+    session.execute(stmt)

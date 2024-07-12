@@ -1,1 +1,4 @@
 pygame
+alembic==1.7.6
+sqlalchemy==1.4.25
+python-dotenv==0.19.0

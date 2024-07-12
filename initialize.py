@@ -1,4 +1,5 @@
 import logging
+import sqlalchemy as sa
 import pygame
 import constants
 
@@ -18,3 +19,8 @@ def init():
     EnterScoreFont = pygame.font.Font('fonts/Tomorrow-Regular.ttf', 36)
 
     return logger, screen, clock, scoreFont, EnterScoreFont
+
+def initDB():
+    return sa.create_engine(
+        url="mysql+pymysql://user:password@localhost:3306/snake_game"
+    )
