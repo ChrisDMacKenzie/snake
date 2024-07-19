@@ -13,8 +13,10 @@ def drawHighScoresSurface(screen, score, session, enterScoreFont, scoreFont):
     highScoreObjRect = highScoreObj.get_rect()
     highScoreObjRect.center = (640, 50)
     screen.blit(highScoreObj, highScoreObjRect)
+    
     highScores = getHighScores(session)
     writeHighScores(screen, highScores, enterScoreFont, scoreFont)
+    
     pygame.display.update()
 
     viewingHighScores = True
