@@ -50,6 +50,8 @@ class Game:
             
         
         self.snake.playDeathAnimation(self.screen)
+        # reset the even timer
+        pygame.time.set_timer(self.moveEvent, 60)
         time.sleep(2)
         return self.score
 
