@@ -2,6 +2,7 @@ import logging
 import sqlalchemy as sa
 import pygame
 import constants
+import os
 
 def init():
     pygame.init()
@@ -21,6 +22,14 @@ def init():
     return logger, screen, clock, scoreFont, EnterScoreFont
 
 def initDB():
-    return sa.create_engine(
-        url="mysql+pymysql://user:password@localhost:3306/snake_game"
-    )
+    ENDPOINT="snakegamedb.clqkgwy8krgw.us-east-1.rds.amazonaws.com"
+    PORT=3306
+    USER= os.getenv("SNAKE_DB_USER")
+    PASSWORD = os.getenv("SNAKE_DB_PASSWORD")
+    DBNAME="snake_game"
+
+    try:
+        url = "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, ENDPOINT, PORT, DBNAME)
+        return sa.create_engine(url=url)
+    except Exception as e:
+        print("Database connection failed due to {}".format(e))
